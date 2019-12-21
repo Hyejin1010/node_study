@@ -6,5 +6,9 @@
 	"second_user": {
 		"password": "second_pass",
 		"name": "betty"
+	},
+	"newUser": {
+		"password": "12qwerty",
+		"name": "newUser"
 	}
 }

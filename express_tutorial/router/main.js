@@ -6,26 +6,55 @@ module.exports = function(app, fs) {
         res.render('index', {
             title: 'MY HOMEPAGE',
             length: 5,
+            name: sess.name,
+            username: sess.username
         });
     });
 
-    app.get('/login', function (req, res) {
-        sess = req.session;
-        sess.username = 'velopert';
+    app.get('/login/:username/:password', function (req, res) {
+        let sess = req.session;
+
+        fs.readFile(__dirname + '/../data/' + 'user.json', 'utf8', function (err, data) {
+            var users = JSON.parse(data);
+            var username = req.params.username;
+            var password = req.params.password;
+            var result = {};
+
+            if (!users[username]) {
+                result.success = false;
+                result.error = 'not found';
+                res.json(result);
+                return;
+            }
+
+            if (users[username].password = password) {
+                result.success = true;
+                sess.username = username;
+                sess.name = users[username].name;
+            } else {
+                result.success = false;
+                result.error = 'incorrect';
+            }
+            res.json(result);
+        });
     });
 
     app.get('/logout', function (req, res) {
-        // 세션 제거
-        req.session.destroy(function (err) {
-            // cannot access session here
-        });
-    })
+        let sess = req.session;
 
-    /*
-    app.get('/about', function(req, res) {
-        res.render('about.html');
+        if (sess.username) {
+            req.session.destroy(function(err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.redirect('/');
+                }
+            });
+        } else {
+            res.redirect('/');
+        }
     });
-    */
+
     app.get('/list', function (req, res) {
         fs.readFile(__dirname + '/../data/' + 'user.json', 'utf8', function (err, data) {
             console.log(data);
