@@ -1,10 +1,26 @@
 module.exports = function(app, fs) {
     app.get('/', function(req, res) {
+        // 세션 초기 설정(initialize)
+        sess = req.session;
+        console.log(sess.username);
         res.render('index', {
             title: 'MY HOMEPAGE',
             length: 5,
         });
     });
+
+    app.get('/login', function (req, res) {
+        sess = req.session;
+        sess.username = 'velopert';
+    });
+
+    app.get('/logout', function (req, res) {
+        // 세션 제거
+        req.session.destroy(function (err) {
+            // cannot access session here
+        });
+    })
+
     /*
     app.get('/about', function(req, res) {
         res.render('about.html');
