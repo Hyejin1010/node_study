@@ -1,4 +1,5 @@
 var http = require("http");
+// var express = require('express');
 
 http.createServer(function(request, response) {
     /*
@@ -15,3 +16,9 @@ http.createServer(function(request, response) {
 }).listen(8081);
 
 console.log("Server running at http:127.0.0.1:8081");
+
+// events 모듈 사용
+var events = require('events');
+
+// EventEmitter 객체 생성
+var eventEmitter = new events.EventEmitter();
